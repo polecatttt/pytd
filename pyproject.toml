@@ -1,0 +1,30 @@
+[project]
+name = "name"  # UPDATE
+version = "1.0.0"
+authors = [
+    {name = "Polecat", email = "polecat@disroot.org"}
+]
+description = "desc"  # UPDATE
+readme = "README.md"
+license = "MIT"
+keywords = []  # UPDATE
+
+
+[build-system]
+
+
+[project.urls]
+# Repository =
+
+[tool.black]
+line-length = 88
+target-version = ["pyXXX"]  # UPDATE with .python-version
+
+[tool.ruff]
+line-length = 88
+extend-select = ["I"]
+ignore = ["E501"]
+
+[tool.pyright]
+typeCheckingMode = "strict"
+reportMissingImports = false
