@@ -1,13 +1,13 @@
 [project]
-name = "name"  # UPDATE
+name = "pytd"  
 version = "1.0.0"
 authors = [
     {name = "Polecat", email = "polecat@disroot.org"}
 ]
-description = "desc"  # UPDATE
+description = "A simple Python-based CLI todo list."  
 readme = "README.md"
 license = "MIT"
-keywords = []  # UPDATE
+keywords = ["todo", "cli"]   
 
 
 [build-system]
@@ -18,7 +18,7 @@ keywords = []  # UPDATE
 
 [tool.black]
 line-length = 88
-target-version = ["pyXXX"]  # UPDATE with .python-version
+target-version = ["py313"]   
 
 [tool.ruff]
 line-length = 88

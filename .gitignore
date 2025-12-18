@@ -10,7 +10,7 @@ Thumbs.db
 # Python
 dist/
 .venv/
-src/myproject/__pycache__
+src/pytd/__pycache__
 src/*.egg-info
 .python-version
 .mypy_cache/
