@@ -15,6 +15,6 @@ src/*.egg-info
 .python-version
 .mypy_cache/
 
-# Specific to my workflow
+# Other
 .ignore
 .config/

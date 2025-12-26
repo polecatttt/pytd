@@ -1,7 +1,7 @@
-from pytd.helpers import Task
+from pytd.helpers import Task, DueDate
 
 
-def add(name: str, date: list[int]) -> bool: ...
+def add(name: str, date: DueDate) -> bool: ...
 
 
 def list(tasks: list[Task]) -> None: ...

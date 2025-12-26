@@ -1,10 +1,9 @@
 import json
 import os
-from platform import system
 from sys import exit
 from typing import TypedDict
 
-from pytd import globals as g
+import pytd.globals as g
 
 
 class DueDate(TypedDict):
@@ -18,19 +17,17 @@ class Task(TypedDict):
     due_date: DueDate
 
 
+# Config
 def get_conf_dir() -> str:
-    # Windows
-    if system() == "Windows":
+    if g.OS == "Windows":
         return f"{os.environ['LOCALAPPDATA']}\\pytd"
 
-    # MacOS
-    elif system() == "Darwin":
+    elif g.OS == "Darwin":
         return f"{os.environ['HOME']}/Library/Application Support/pytd"
 
-    # Linux
-    elif system() == "Linux":
+    elif g.OS == "Linux":
         try:
-            return f"{os.environ['XDG_CONFIG_DIR']}/pytd"
+            return f"{os.environ['XDG_CONFIG_HOME']}/pytd"
         except KeyError:
             return f"{os.environ['HOME']}/.config/pytd"
 
@@ -49,11 +46,17 @@ def check_config(config_dir: str) -> None:
             exit(1)
 
     # Check the tasks file exists
-    if not os.path.exists(f"{config_dir}/tasks.json"):
+    if not os.path.exists(g.TASKS_JSON):
         with open(f"{config_dir}/tasks.json", "x") as f:
             f.close()
 
     # Check if the config file exists
-    if not os.path.exists(f"{config_dir}/pytd.conf"):
+    if not os.path.exists(g.PYTD_CONF):
         with open(f"{config_dir}/pytd.conf", "x") as f:
             f.close()
+
+
+# Tasks
+def get_tasks(filepath: str) -> list[Task]:
+    with open(filepath, "r") as f:
+        return json.load(f)
