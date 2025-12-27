@@ -1,8 +1,11 @@
 from sys import argv, exit
 
+import pytd.globals as g
+import pytd.helpers as helpers
+import pytd.opers as oper
+
 
 def main(args: list[str]) -> int:
-    print("Hello from pytd!")
     return 0
 
 

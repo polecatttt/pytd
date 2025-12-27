@@ -1,12 +1,13 @@
 import json
 import os
+from datetime import date
 from sys import exit
 from typing import TypedDict
 
 import pytd.globals as g
 
 
-class DueDate(TypedDict):
+class Date(TypedDict):
     day: int
     month: int
     year: int
@@ -14,7 +15,17 @@ class DueDate(TypedDict):
 
 class Task(TypedDict):
     name: str
-    due_date: DueDate
+    status: str
+    group: str
+    due_date: Date
+
+
+class TaskDataset(TypedDict):
+    name: str
+    status: str
+    group: str
+    due_date: str
+    due_in: str
 
 
 # Config
@@ -47,12 +58,12 @@ def check_config(config_dir: str) -> None:
 
     # Check the tasks file exists
     if not os.path.exists(g.TASKS_JSON):
-        with open(f"{config_dir}/tasks.json", "x") as f:
+        with open(g.TASKS_JSON, "x") as f:
             f.close()
 
     # Check if the config file exists
     if not os.path.exists(g.PYTD_CONF):
-        with open(f"{config_dir}/pytd.conf", "x") as f:
+        with open(g.PYTD_CONF, "x") as f:
             f.close()
 
 
@@ -60,3 +71,51 @@ def check_config(config_dir: str) -> None:
 def get_tasks(filepath: str) -> list[Task]:
     with open(filepath, "r") as f:
         return json.load(f)
+
+
+# Helpers for list
+def get_today() -> Date:
+    today: date = date.today()
+    return {
+        "day": today.day,
+        "month": today.month,
+        "year": today.year,
+    }
+
+
+def get_days_diff(date1: Date, date2: Date) -> int:
+    d1_obj: date = date(date1["year"], date1["month"], date1["day"])
+    d2_obj: date = date(date2["year"], date2["month"], date2["day"])
+    return (d2_obj - d1_obj).days
+
+
+def get_days_col(days: int) -> str:
+    if days <= g.THRESHOLD_RED:
+        return g.RED
+    elif days <= g.THRESHOLD_YELLOW:
+        return g.YELLOW
+    return g.GREEN
+
+
+def get_tasks_dataset(tasks: list[Task]) -> list[TaskDataset]:
+    tasks_dataset: list[TaskDataset] = []
+
+    for task in tasks:
+        name: str = task["name"]
+        status: str = task["status"]
+        group: str = task["group"]
+        due: Date = task["due_date"]
+        due_str: str = str(date(due["year"], due["month"], due["day"]))
+        days_diff: int = get_days_diff(get_today(), due)
+        diff_col: str = get_days_col(days_diff)
+        diff_str: str = f"{diff_col}{days_diff}d{g.RESET}"
+        dataset: TaskDataset = {
+            "name": name,
+            "status": status,
+            "group": group,
+            "due_date": due_str,
+            "due_in": diff_str,
+        }
+        tasks_dataset.append(dataset)
+
+    return tasks_dataset

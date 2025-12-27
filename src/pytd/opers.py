@@ -1,10 +1,57 @@
-from pytd.helpers import Task, DueDate
+from tabulate import tabulate
+
+import pytd.globals as g
+from pytd.helpers import TaskDataset
 
 
-def add(name: str, date: DueDate) -> bool: ...
+# List
+def list_all(dataset: list[TaskDataset]) -> None:
+    print(tabulate(dataset, g.LIST_HEADERS))
 
 
-def list(tasks: list[Task]) -> None: ...
+def list_name(dataset: list[TaskDataset], name: str | None) -> None:
+    sorted_dataset: list[TaskDataset] = []
+    if name:
+        sorted_dataset = [task for task in dataset if task["name"] == name]
+    else:
+        sorted_dataset = sorted(dataset, key=lambda x: x["name"])
+
+    if not sorted_dataset:
+        print("No tasks matched parameters!")
+        return
+
+    print(tabulate(sorted_dataset, g.LIST_HEADERS))
 
 
-def rm(name: str) -> bool: ...
+def list_duedate(dataset: list[TaskDataset]) -> None:
+    # Removes ANSI from due_in to sort by the number alone
+    sorted_dataset = sorted(dataset, key=lambda x: g.ANSI_RE.sub("", x["due_in"]))
+    print(tabulate(sorted_dataset, g.LIST_HEADERS))
+
+
+def list_status(dataset: list[TaskDataset], status: str | None):
+    sorted_dataset: list[TaskDataset] = []
+    if status:
+        sorted_dataset = [task for task in dataset if task["status"] == status]
+    else:
+        sorted_dataset = sorted(dataset, key=lambda x: g.STATUS_ORDER[x["status"]])
+
+    if not sorted_dataset:
+        print("No tasks matched parameters!")
+        return
+
+    print(tabulate(sorted_dataset, g.LIST_HEADERS))
+
+
+def list_group(dataset: list[TaskDataset], group: str | None) -> None:
+    sorted_dataset: list[TaskDataset] = []
+    if group:
+        sorted_dataset = [task for task in dataset if task["group"] == group]
+    else:
+        sorted_dataset = sorted(dataset, key=lambda x: x["group"])
+
+    if not sorted_dataset:
+        print("No tasks matched parameters!")
+        return
+
+    print(tabulate(sorted_dataset, g.LIST_HEADERS))
