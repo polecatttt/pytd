@@ -105,10 +105,16 @@ def get_tasks_dataset(tasks: list[Task]) -> list[TaskDataset]:
         status: str = task["status"]
         group: str = task["group"]
         due: Date = task["due_date"]
-        due_str: str = str(date(due["year"], due["month"], due["day"]))
-        days_diff: int = get_days_diff(get_today(), due)
-        diff_col: str = get_days_col(days_diff)
-        diff_str: str = f"{diff_col}{days_diff}d{g.RESET}"
+        diff_str: str = ""
+        due_str: str = "No due date"
+
+        # Check if date is valid (task has no date if not)
+        if due["year"] != -1:
+            due_str = str(date(due["year"], due["month"], due["day"]))
+            days_diff: int = get_days_diff(get_today(), due)
+            diff_col: str = get_days_col(days_diff)
+            diff_str = f"{diff_col}{days_diff}d{g.RESET}"
+
         dataset: TaskDataset = {
             "name": name,
             "status": status,
