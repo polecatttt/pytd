@@ -1,7 +1,9 @@
+import json
+
 from tabulate import tabulate
 
 import pytd.globals as g
-from pytd.helpers import TaskDataset
+from pytd.helpers import Date, Task, TaskDataset
 
 
 # List
@@ -55,3 +57,17 @@ def list_group(dataset: list[TaskDataset], group: str | None) -> None:
         return
 
     print(tabulate(sorted_dataset, g.LIST_HEADERS))
+
+
+# Add
+def add(name: str, due_date: Date, group: str) -> None:
+    task_dict: Task = {
+        "name": name,
+        "status": "Due",
+        "group": group,
+        "due_date": due_date,
+    }
+
+    g.TASKS.append(task_dict)
+    with open(g.TASKS_JSON, "w") as f:
+        json.dump(g.TASKS, f, indent=4)

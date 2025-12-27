@@ -6,6 +6,12 @@ import pytd.opers as oper
 
 
 def main(args: list[str]) -> int:
+    date: helpers.Date = {
+        "day": 12,
+        "month": 1,
+        "year": 2026,
+    }
+    oper.add("hw", date, "Default")
     dataset: list[helpers.TaskDataset] = helpers.get_tasks_dataset(g.TASKS)
     oper.list_duedate(dataset)
     return 0
