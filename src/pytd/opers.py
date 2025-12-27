@@ -3,6 +3,7 @@ import json
 from tabulate import tabulate
 
 import pytd.globals as g
+from pytd import helpers
 from pytd.helpers import Date, Task, TaskDataset
 
 
@@ -69,5 +70,33 @@ def add(name: str, due_date: Date, group: str) -> None:
     }
 
     g.TASKS.append(task_dict)
+    with open(g.TASKS_JSON, "w") as f:
+        json.dump(g.TASKS, f, indent=4)
+
+
+# Status
+def status(name: str, new_status: str) -> None:
+    found: bool = False
+    pending: list[Task] = []
+    pending_idx: list[int] = []
+
+    for idx, task in enumerate(g.TASKS):
+        if task["name"] == name:
+            found = True
+            pending.append(task)
+            pending_idx.append(idx)
+
+    if not found:
+        print("Task not found!")
+        return
+
+    if len(pending) > 1:
+        choice: int = helpers.handle_multiple(pending)
+        idx: int = pending_idx[choice - 1]
+        g.TASKS[idx]["status"] = new_status
+
+    else:
+        g.TASKS[pending_idx[0]]["status"] = new_status
+
     with open(g.TASKS_JSON, "w") as f:
         json.dump(g.TASKS, f, indent=4)

@@ -4,6 +4,8 @@ from datetime import date
 from sys import exit
 from typing import TypedDict
 
+from tabulate import tabulate
+
 import pytd.globals as g
 
 
@@ -71,6 +73,35 @@ def check_config(config_dir: str) -> None:
 def get_tasks(filepath: str) -> list[Task]:
     with open(filepath, "r") as f:
         return json.load(f)
+
+
+def handle_multiple(tasks: list[Task]) -> int:
+    dataset: list[TaskDataset] = get_tasks_dataset(tasks)
+
+    print("There are multiple tasks with that name:")
+    print(tabulate(dataset, g.LIST_HEADERS))
+    print()
+
+    choice: int = -1
+    user_inp: str = ""
+    while True:
+        user_inp = input(
+            f"Which task would you like to preform this operation on? (1 - {len(tasks)}): "
+        )
+        try:
+            choice = int(user_inp)
+            if choice > len(tasks):
+                print(f"Choice cannot be more than {len(tasks)}")
+                continue
+            elif choice < 1:
+                print("Choice cannot be lower than one")
+                continue
+            break
+        except ValueError:
+            print("Invalid number")
+            continue
+
+    return choice
 
 
 # Helpers for list
