@@ -95,6 +95,60 @@ def add(name: str, due_date: Date, group: str, priority: int, description: str) 
 
 
 # Edit
+def edit_name(name: str, new_name: str):
+    found: bool = False
+    pending: list[Task] = []
+    pending_idx: list[int] = []
+
+    for idx, task in enumerate(g.TASKS):
+        if task["name"] == name:
+            found = True
+            pending.append(task)
+            pending_idx.append(idx)
+
+    if not found:
+        print("Task not found!")
+        return
+
+    if len(pending) > 1:
+        choice: int = helpers.handle_multiple(pending)
+        idx: int = pending_idx[choice - 1]
+        g.TASKS[idx]["name"] = new_name
+
+    else:
+        g.TASKS[pending_idx[0]]["name"] = new_name
+
+    with open(g.TASKS_JSON, "w") as f:
+        json.dump(g.TASKS, f, indent=4)
+
+
+def edit_group(name: str, new_group: str):
+    found: bool = False
+    pending: list[Task] = []
+    pending_idx: list[int] = []
+
+    for idx, task in enumerate(g.TASKS):
+        if task["name"] == name:
+            found = True
+            pending.append(task)
+            pending_idx.append(idx)
+
+    if not found:
+        print("Task not found!")
+        return
+
+    if len(pending) > 1:
+        choice: int = helpers.handle_multiple(pending)
+        idx: int = pending_idx[choice - 1]
+        g.TASKS[idx]["group"] = new_group
+
+    else:
+        g.TASKS[pending_idx[0]]["group"] = new_group
+
+    with open(g.TASKS_JSON, "w") as f:
+        json.dump(g.TASKS, f, indent=4)
+
+
 def edit_status(name: str, new_status: str) -> None:
     found: bool = False
     pending: list[Task] = []
@@ -117,6 +171,87 @@ def edit_status(name: str, new_status: str) -> None:
 
     else:
         g.TASKS[pending_idx[0]]["status"] = new_status
+
+    with open(g.TASKS_JSON, "w") as f:
+        json.dump(g.TASKS, f, indent=4)
+
+
+def edit_priority(name: str, new_priority: int) -> None:
+    found: bool = False
+    pending: list[Task] = []
+    pending_idx: list[int] = []
+
+    for idx, task in enumerate(g.TASKS):
+        if task["name"] == name:
+            found = True
+            pending.append(task)
+            pending_idx.append(idx)
+
+    if not found:
+        print("Task not found!")
+        return
+
+    if len(pending) > 1:
+        choice: int = helpers.handle_multiple(pending)
+        idx: int = pending_idx[choice - 1]
+        g.TASKS[idx]["priority"] = new_priority
+
+    else:
+        g.TASKS[pending_idx[0]]["priority"] = new_priority
+
+    with open(g.TASKS_JSON, "w") as f:
+        json.dump(g.TASKS, f, indent=4)
+
+
+def edit_duedate(name: str, new_date: Date):
+    found: bool = False
+    pending: list[Task] = []
+    pending_idx: list[int] = []
+
+    for idx, task in enumerate(g.TASKS):
+        if task["name"] == name:
+            found = True
+            pending.append(task)
+            pending_idx.append(idx)
+
+    if not found:
+        print("Task not found!")
+        return
+
+    if len(pending) > 1:
+        choice: int = helpers.handle_multiple(pending)
+        idx: int = pending_idx[choice - 1]
+        g.TASKS[idx]["due_date"] = new_date
+
+    else:
+        g.TASKS[pending_idx[0]]["due_date"] = new_date
+
+    with open(g.TASKS_JSON, "w") as f:
+        json.dump(g.TASKS, f, indent=4)
+
+
+def edit_desc(name: str, new_desc: str):
+    found: bool = False
+    pending: list[Task] = []
+    pending_idx: list[int] = []
+
+    for idx, task in enumerate(g.TASKS):
+        if task["name"] == name:
+            found = True
+            pending.append(task)
+            pending_idx.append(idx)
+
+    if not found:
+        print("Task not found!")
+        return
+
+    if len(pending) > 1:
+        choice: int = helpers.handle_multiple(pending)
+        idx: int = pending_idx[choice - 1]
+        g.TASKS[idx]["description"] = new_desc
+
+    else:
+        g.TASKS[pending_idx[0]]["description"] = new_desc
 
     with open(g.TASKS_JSON, "w") as f:
         json.dump(g.TASKS, f, indent=4)
