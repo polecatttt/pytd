@@ -11,8 +11,14 @@ def main(args: list[str]) -> int:
         "month": 1,
         "year": 2026,
     }
+    date2: helpers.Date = {
+        "day": 31,
+        "month": 1,
+        "year": 2027,
+    }
     oper.add("hw", date, "default", 3, "")
-    oper.add("hw", date, "default", 1, "")
+    oper.add("hw", date2, "default", 1, "")
+    oper.rm("hw")
     return 0
 
 

@@ -255,3 +255,31 @@ def edit_desc(name: str, new_desc: str):
 
     with open(g.TASKS_JSON, "w") as f:
         json.dump(g.TASKS, f, indent=4)
+
+
+# Delete
+def rm(name: str) -> None:
+    found: bool = False
+    pending: list[Task] = []
+    pending_idx: list[int] = []
+
+    for idx, task in enumerate(g.TASKS):
+        if task["name"] == name:
+            found = True
+            pending.append(task)
+            pending_idx.append(idx)
+
+    if not found:
+        print("Task not found!")
+        return
+
+    if len(pending) > 1:
+        choice: int = helpers.handle_multiple(pending)
+        idx: int = pending_idx[choice - 1]
+        g.TASKS.pop(idx)
+
+    else:
+        g.TASKS.pop(pending_idx[0])
+
+    with open(g.TASKS_JSON, "w") as f:
+        json.dump(g.TASKS, f, indent=4)
