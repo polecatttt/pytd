@@ -60,13 +60,33 @@ def list_group(dataset: list[TaskDataset], group: str | None) -> None:
     print(tabulate(sorted_dataset, g.LIST_HEADERS))
 
 
+def list_priority(dataset: list[TaskDataset], priority: int | None) -> None:
+    sorted_dataset: list[TaskDataset] = []
+    if priority:
+        sorted_dataset = [
+            task
+            for task in dataset
+            if g.ANSI_RE.sub("", task["priority"]) == str(priority)
+        ]
+    else:
+        sorted_dataset = sorted(dataset, key=lambda x: g.ANSI_RE.sub("", x["priority"]))
+
+    if not sorted_dataset:
+        print("No tasks matched parameters!")
+        return
+
+    print(tabulate(sorted_dataset, g.LIST_HEADERS))
+
+
 # Add
-def add(name: str, due_date: Date, group: str) -> None:
+def add(name: str, due_date: Date, group: str, priority: int, description: str) -> None:
     task_dict: Task = {
         "name": name,
         "status": "Due",
         "group": group,
+        "priority": priority,
         "due_date": due_date,
+        "description": description,
     }
 
     g.TASKS.append(task_dict)
@@ -74,8 +94,8 @@ def add(name: str, due_date: Date, group: str) -> None:
         json.dump(g.TASKS, f, indent=4)
 
 
-# Status
-def status(name: str, new_status: str) -> None:
+# Edit
+def edit_status(name: str, new_status: str) -> None:
     found: bool = False
     pending: list[Task] = []
     pending_idx: list[int] = []

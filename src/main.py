@@ -11,9 +11,11 @@ def main(args: list[str]) -> int:
         "month": 1,
         "year": 2026,
     }
-    oper.status("wow", "Done")
-    dataset: list[helpers.TaskDataset] = helpers.get_tasks_dataset(g.TASKS)
-    oper.list_duedate(dataset)
+    dataset = helpers.get_tasks_dataset(g.TASKS)
+    # print(dataset)
+    # oper.list_all(dataset)
+    oper.list_priority(dataset, 1)
+
     return 0
 
 

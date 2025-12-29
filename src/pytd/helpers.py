@@ -19,13 +19,16 @@ class Task(TypedDict):
     name: str
     status: str
     group: str
+    priority: int
     due_date: Date
+    description: str
 
 
 class TaskDataset(TypedDict):
     name: str
     status: str
     group: str
+    priority: str
     due_date: str
     due_in: str
 
@@ -128,6 +131,16 @@ def get_days_col(days: int) -> str:
     return g.GREEN
 
 
+def get_priority_col(priority: int) -> str:
+    if priority == 1:
+        return g.RED
+    elif priority == 2:
+        return g.YELLOW
+    elif priority == 3:
+        return g.GREEN
+    return g.WHITE
+
+
 def get_tasks_dataset(tasks: list[Task]) -> list[TaskDataset]:
     tasks_dataset: list[TaskDataset] = []
 
@@ -135,6 +148,9 @@ def get_tasks_dataset(tasks: list[Task]) -> list[TaskDataset]:
         name: str = task["name"]
         status: str = task["status"]
         group: str = task["group"]
+        priority: int = task["priority"]
+        priority_col: str = get_priority_col(priority)
+        priority_str: str = f"{priority_col}{priority}{g.RESET}"
         due: Date = task["due_date"]
         diff_str: str = ""
         due_str: str = "No due date"
@@ -150,6 +166,7 @@ def get_tasks_dataset(tasks: list[Task]) -> list[TaskDataset]:
             "name": name,
             "status": status,
             "group": group,
+            "priority": priority_str,
             "due_date": due_str,
             "due_in": diff_str,
         }
