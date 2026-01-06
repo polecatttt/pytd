@@ -16,7 +16,7 @@ RESET = "\033[0m"
 
 # Config
 OS: str = system()
-CONFIG_PATH: str = helpers.get_conf_dir()
+CONFIG_PATH: str = helpers.get_conf_path()
 # TASKS_JSON: str = f"{CONFIG_PATH}/tasks.json"
 TASKS_JSON: str = "/home/polecat/Downloads/pytd/tasks.json"
 PYTD_CONF: str = f"{CONFIG_PATH}/pytd.conf"
@@ -33,6 +33,7 @@ LIST_HEADERS: dict[str, str] = {
     "name": "Name",
     "status": "Status",
     "group": "Group",
+    "priority": "Priority",
     "due_date": "Due Date",
     "due_in": "Due In",
 }

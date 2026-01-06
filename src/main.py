@@ -6,6 +6,11 @@ import pytd.opers as oper
 
 
 def main(args: list[str]) -> int:
+
+    # initial checks
+    # helpers.check_config()
+    helpers.validate_json()
+
     date: helpers.Date = {
         "day": 12,
         "month": 1,
@@ -16,9 +21,10 @@ def main(args: list[str]) -> int:
         "month": 1,
         "year": 2027,
     }
-    oper.add("hw", date, "default", 3, "")
-    oper.add("hw", date2, "default", 1, "")
-    oper.rm("hw")
+    # oper.add("hw", date, "default", 3, "")
+    # oper.add("hw", date2, "default", 1, "")
+    oper.edit("hw", "due_date", date2)
+    oper.list_all()
     return 0
 
 

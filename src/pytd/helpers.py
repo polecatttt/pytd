@@ -34,7 +34,7 @@ class TaskDataset(TypedDict):
 
 
 # Config
-def get_conf_dir() -> str:
+def get_conf_path() -> str:
     if g.OS == "Windows":
         return f"{os.environ['LOCALAPPDATA']}\\pytd"
 
@@ -52,11 +52,11 @@ def get_conf_dir() -> str:
         return f"{os.environ['HOME']}/.pytd"
 
 
-def check_config(config_dir: str) -> None:
+def check_config() -> None:
     # Check the directory exists
-    if not os.path.exists(config_dir):
+    if not os.path.exists(g.CONFIG_PATH):
         try:
-            os.mkdir(config_dir)
+            os.mkdir(g.CONFIG_PATH)
         except FileNotFoundError:
             print(f"{g.RED}FATAL:{g.RESET} config directory does not exist")
             exit(1)
@@ -72,10 +72,32 @@ def check_config(config_dir: str) -> None:
             f.close()
 
 
+def validate_json() -> None:
+    current_task: int = 1
+    for task in g.TASKS:
+        try:
+            task["name"]
+            task["group"]
+            task["status"]
+            task["priority"]
+            task["due_date"]
+            task["description"]
+        except KeyError as e:
+            print(f"Invalid task format for task {current_task}: missing {e}")
+            print(f"Full task: {task}")
+            exit(1)
+
+        current_task += 1
+
+
 # Tasks
 def get_tasks(filepath: str) -> list[Task]:
-    with open(filepath, "r") as f:
-        return json.load(f)
+    try:
+        with open(filepath, "r") as f:
+            return json.load(f)
+    except json.decoder.JSONDecodeError as e:
+        print(f"Malformed tasks.json: {e}")
+        exit(1)
 
 
 def handle_multiple(tasks: list[Task]) -> int:
@@ -105,6 +127,11 @@ def handle_multiple(tasks: list[Task]) -> int:
             continue
 
     return choice
+
+
+def update_tasks() -> None:
+    with open(g.TASKS_JSON, "w") as f:
+        json.dump(g.TASKS, f, indent=4)
 
 
 # Helpers for list

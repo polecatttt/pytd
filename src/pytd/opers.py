@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 from tabulate import tabulate
 
@@ -8,11 +9,13 @@ from pytd.helpers import Date, Task, TaskDataset
 
 
 # List
-def list_all(dataset: list[TaskDataset]) -> None:
+def list_all() -> None:
+    dataset: list[TaskDataset] = helpers.get_tasks_dataset(g.TASKS)
     print(tabulate(dataset, g.LIST_HEADERS))
 
 
-def list_name(dataset: list[TaskDataset], name: str | None) -> None:
+def list_name(name: str | None) -> None:
+    dataset: list[TaskDataset] = helpers.get_tasks_dataset(g.TASKS)
     sorted_dataset: list[TaskDataset] = []
     if name:
         sorted_dataset = [task for task in dataset if task["name"] == name]
@@ -26,14 +29,18 @@ def list_name(dataset: list[TaskDataset], name: str | None) -> None:
     print(tabulate(sorted_dataset, g.LIST_HEADERS))
 
 
-def list_duedate(dataset: list[TaskDataset]) -> None:
+def list_duedate() -> None:
+    dataset: list[TaskDataset] = helpers.get_tasks_dataset(g.TASKS)
+
     # Removes ANSI from due_in to sort by the number alone
     sorted_dataset = sorted(dataset, key=lambda x: g.ANSI_RE.sub("", x["due_in"]))
     print(tabulate(sorted_dataset, g.LIST_HEADERS))
 
 
-def list_status(dataset: list[TaskDataset], status: str | None):
+def list_status(status: str | None):
+    dataset: list[TaskDataset] = helpers.get_tasks_dataset(g.TASKS)
     sorted_dataset: list[TaskDataset] = []
+
     if status:
         sorted_dataset = [task for task in dataset if task["status"] == status]
     else:
@@ -46,8 +53,10 @@ def list_status(dataset: list[TaskDataset], status: str | None):
     print(tabulate(sorted_dataset, g.LIST_HEADERS))
 
 
-def list_group(dataset: list[TaskDataset], group: str | None) -> None:
+def list_group(group: str | None) -> None:
+    dataset: list[TaskDataset] = helpers.get_tasks_dataset(g.TASKS)
     sorted_dataset: list[TaskDataset] = []
+
     if group:
         sorted_dataset = [task for task in dataset if task["group"] == group]
     else:
@@ -60,8 +69,11 @@ def list_group(dataset: list[TaskDataset], group: str | None) -> None:
     print(tabulate(sorted_dataset, g.LIST_HEADERS))
 
 
-def list_priority(dataset: list[TaskDataset], priority: int | None) -> None:
+def list_priority(priority: int | None) -> None:
+
+    dataset: list[TaskDataset] = helpers.get_tasks_dataset(g.TASKS)
     sorted_dataset: list[TaskDataset] = []
+
     if priority:
         sorted_dataset = [
             task
@@ -95,7 +107,7 @@ def add(name: str, due_date: Date, group: str, priority: int, description: str) 
 
 
 # Edit
-def edit_name(name: str, new_name: str):
+def edit(name: str, key: str, new_val: Any) -> None:
     found: bool = False
     pending: list[Task] = []
     pending_idx: list[int] = []
@@ -112,149 +124,13 @@ def edit_name(name: str, new_name: str):
 
     if len(pending) > 1:
         choice: int = helpers.handle_multiple(pending)
-        idx: int = pending_idx[choice - 1]
-        g.TASKS[idx]["name"] = new_name
+        choice_idx: int = pending_idx[choice - 1]
+        g.TASKS[choice_idx][key] = new_val
 
     else:
-        g.TASKS[pending_idx[0]]["name"] = new_name
+        g.TASKS[pending_idx[0]][key] = new_val
 
-    with open(g.TASKS_JSON, "w") as f:
-        json.dump(g.TASKS, f, indent=4)
-
-
-def edit_group(name: str, new_group: str):
-    found: bool = False
-    pending: list[Task] = []
-    pending_idx: list[int] = []
-
-    for idx, task in enumerate(g.TASKS):
-        if task["name"] == name:
-            found = True
-            pending.append(task)
-            pending_idx.append(idx)
-
-    if not found:
-        print("Task not found!")
-        return
-
-    if len(pending) > 1:
-        choice: int = helpers.handle_multiple(pending)
-        idx: int = pending_idx[choice - 1]
-        g.TASKS[idx]["group"] = new_group
-
-    else:
-        g.TASKS[pending_idx[0]]["group"] = new_group
-
-    with open(g.TASKS_JSON, "w") as f:
-        json.dump(g.TASKS, f, indent=4)
-
-
-def edit_status(name: str, new_status: str) -> None:
-    found: bool = False
-    pending: list[Task] = []
-    pending_idx: list[int] = []
-
-    for idx, task in enumerate(g.TASKS):
-        if task["name"] == name:
-            found = True
-            pending.append(task)
-            pending_idx.append(idx)
-
-    if not found:
-        print("Task not found!")
-        return
-
-    if len(pending) > 1:
-        choice: int = helpers.handle_multiple(pending)
-        idx: int = pending_idx[choice - 1]
-        g.TASKS[idx]["status"] = new_status
-
-    else:
-        g.TASKS[pending_idx[0]]["status"] = new_status
-
-    with open(g.TASKS_JSON, "w") as f:
-        json.dump(g.TASKS, f, indent=4)
-
-
-def edit_priority(name: str, new_priority: int) -> None:
-    found: bool = False
-    pending: list[Task] = []
-    pending_idx: list[int] = []
-
-    for idx, task in enumerate(g.TASKS):
-        if task["name"] == name:
-            found = True
-            pending.append(task)
-            pending_idx.append(idx)
-
-    if not found:
-        print("Task not found!")
-        return
-
-    if len(pending) > 1:
-        choice: int = helpers.handle_multiple(pending)
-        idx: int = pending_idx[choice - 1]
-        g.TASKS[idx]["priority"] = new_priority
-
-    else:
-        g.TASKS[pending_idx[0]]["priority"] = new_priority
-
-    with open(g.TASKS_JSON, "w") as f:
-        json.dump(g.TASKS, f, indent=4)
-
-
-def edit_duedate(name: str, new_date: Date):
-    found: bool = False
-    pending: list[Task] = []
-    pending_idx: list[int] = []
-
-    for idx, task in enumerate(g.TASKS):
-        if task["name"] == name:
-            found = True
-            pending.append(task)
-            pending_idx.append(idx)
-
-    if not found:
-        print("Task not found!")
-        return
-
-    if len(pending) > 1:
-        choice: int = helpers.handle_multiple(pending)
-        idx: int = pending_idx[choice - 1]
-        g.TASKS[idx]["due_date"] = new_date
-
-    else:
-        g.TASKS[pending_idx[0]]["due_date"] = new_date
-
-    with open(g.TASKS_JSON, "w") as f:
-        json.dump(g.TASKS, f, indent=4)
-
-
-def edit_desc(name: str, new_desc: str):
-    found: bool = False
-    pending: list[Task] = []
-    pending_idx: list[int] = []
-
-    for idx, task in enumerate(g.TASKS):
-        if task["name"] == name:
-            found = True
-            pending.append(task)
-            pending_idx.append(idx)
-
-    if not found:
-        print("Task not found!")
-        return
-
-    if len(pending) > 1:
-        choice: int = helpers.handle_multiple(pending)
-        idx: int = pending_idx[choice - 1]
-        g.TASKS[idx]["description"] = new_desc
-
-    else:
-        g.TASKS[pending_idx[0]]["description"] = new_desc
-
-    with open(g.TASKS_JSON, "w") as f:
-        json.dump(g.TASKS, f, indent=4)
+    helpers.update_tasks()
 
 
 # Delete
@@ -281,5 +157,4 @@ def rm(name: str) -> None:
     else:
         g.TASKS.pop(pending_idx[0])
 
-    with open(g.TASKS_JSON, "w") as f:
-        json.dump(g.TASKS, f, indent=4)
+    helpers.update_tasks()
