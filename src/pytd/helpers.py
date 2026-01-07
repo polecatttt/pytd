@@ -36,39 +36,49 @@ class TaskDataset(TypedDict):
 # Config
 def get_conf_path() -> str:
     if g.OS == "Windows":
-        return f"{os.environ['LOCALAPPDATA']}\\pytd"
+        conf_path: str = f"{os.environ['LOCALAPPDATA']}\\pytd"
 
     elif g.OS == "Darwin":
-        return f"{os.environ['HOME']}/Library/Application Support/pytd"
+        conf_path: str = f"{os.environ['HOME']}/Library/Application Support/pytd"
 
     elif g.OS == "Linux":
         try:
-            return f"{os.environ['XDG_CONFIG_HOME']}/pytd"
+            conf_path: str = f"{os.environ['XDG_CONFIG_HOME']}/pytd"
         except KeyError:
-            return f"{os.environ['HOME']}/.config/pytd"
+            conf_path: str = f"{os.environ['HOME']}/.config/pytd"
 
     # I don't know...
     else:
-        return f"{os.environ['HOME']}/.pytd"
+        conf_path: str = f"{os.environ['HOME']}/.pytd"
+
+    # Check config
+    check_config(conf_path)
+
+    return conf_path
 
 
-def check_config() -> None:
+def check_config(conf_path: str) -> None:
     # Check the directory exists
-    if not os.path.exists(g.CONFIG_PATH):
+    if not os.path.exists(conf_path):
         try:
-            os.mkdir(g.CONFIG_PATH)
+            os.mkdir(conf_path)
         except FileNotFoundError:
             print(f"{g.RED}FATAL:{g.RESET} config directory does not exist")
             exit(1)
 
     # Check the tasks file exists
-    if not os.path.exists(g.TASKS_JSON):
-        with open(g.TASKS_JSON, "x") as f:
+    if not os.path.exists(f"{conf_path}/tasks.json"):
+        with open(f"{conf_path}/tasks.json", "x") as f:
             f.close()
 
+    # Check if the tasks file is empty
+    if os.path.getsize(f"{conf_path}/tasks.json") == 0:
+        with open(f"{conf_path}/tasks.json", "w") as f:
+            f.write("[]")
+
     # Check if the config file exists
-    if not os.path.exists(g.PYTD_CONF):
-        with open(g.PYTD_CONF, "x") as f:
+    if not os.path.exists(f"{conf_path}/pytd.conf"):
+        with open(f"{conf_path}/pytd.conf", "x") as f:
             f.close()
 
 

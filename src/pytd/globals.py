@@ -17,8 +17,7 @@ RESET = "\033[0m"
 # Config
 OS: str = system()
 CONFIG_PATH: str = helpers.get_conf_path()
-# TASKS_JSON: str = f"{CONFIG_PATH}/tasks.json"
-TASKS_JSON: str = "/home/polecat/Downloads/pytd/tasks.json"
+TASKS_JSON: str = f"{CONFIG_PATH}/tasks.json"
 PYTD_CONF: str = f"{CONFIG_PATH}/pytd.conf"
 
 # Config Values

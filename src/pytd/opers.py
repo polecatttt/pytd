@@ -12,6 +12,10 @@ from pytd.helpers import Date, Task, TaskDataset
 # List
 def list_all() -> None:
     dataset: list[TaskDataset] = helpers.get_tasks_dataset(g.TASKS)
+    if not dataset:
+        print("No tasks matched parameters!")
+        return
+
     print(tabulate(dataset, g.LIST_HEADERS))
 
 
