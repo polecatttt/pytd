@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from typing import Any
 
 from tabulate import tabulate
@@ -158,3 +159,40 @@ def rm(name: str) -> None:
         g.TASKS.pop(pending_idx[0])
 
     helpers.update_tasks()
+
+
+# Info
+def info(name: str) -> None:
+    found: bool = False
+    pending: list[Task] = []
+    pending_idx: list[int] = []
+
+    for idx, task in enumerate(g.TASKS):
+        if task["name"] == name:
+            found = True
+            pending.append(task)
+            pending_idx.append(idx)
+
+    if not found:
+        print("Task not found!")
+        return
+
+    if len(pending) > 1:
+        choice: int = helpers.handle_multiple(pending)
+        idx: int = pending_idx[choice - 1]
+
+    else:
+        idx: int = pending_idx[0]
+
+    task: Task = g.TASKS[idx]
+    print(f"Name: {task["name"]}")
+    print(f"Status: {task["status"]}")
+    print(f"Group: {task["group"]}")
+    print(
+        f"Priority: {helpers.get_priority_col(task["priority"])}{task["priority"]}{g.RESET}"
+    )
+    print(
+        f"Due Date: {str(date(task["due_date"]["year"], task["due_date"]["month"], task["due_date"]["day"]))}"
+    )
+    print()
+    print(f"Description: {task["description"]}")

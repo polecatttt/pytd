@@ -23,8 +23,8 @@ def main(args: list[str]) -> int:
     }
     # oper.add("hw", date, "default", 3, "")
     # oper.add("hw", date2, "default", 1, "")
-    oper.edit("hw", "due_date", date2)
-    oper.list_all()
+    # oper.edit("bedrock", "description", "hi")
+    # oper.info("bedrock")
     return 0
 
 
