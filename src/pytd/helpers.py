@@ -2,7 +2,7 @@ import json
 import os
 from datetime import date
 from sys import exit
-from typing import TypedDict
+from typing import Any, TypedDict, cast
 
 from tabulate import tabulate
 
@@ -51,9 +51,6 @@ def get_conf_path() -> str:
     else:
         conf_path: str = f"{os.environ['HOME']}/.pytd"
 
-    # Check config
-    check_config(conf_path)
-
     return conf_path
 
 
@@ -82,32 +79,83 @@ def check_config(conf_path: str) -> None:
             f.close()
 
 
-def validate_json() -> None:
-    current_task: int = 1
-    for task in g.TASKS:
-        try:
-            task["name"]
-            task["group"]
-            task["status"]
-            task["priority"]
-            task["due_date"]
-            task["description"]
-        except KeyError as e:
-            print(f"Invalid task format for task {current_task}: missing {e}")
-            print(f"Full task: {task}")
-            exit(1)
-
-        current_task += 1
-
-
-# Tasks
 def get_tasks(filepath: str) -> list[Task]:
+    # get task
     try:
         with open(filepath, "r") as f:
-            return json.load(f)
+            tasks: object = json.load(f)
     except json.decoder.JSONDecodeError as e:
-        print(f"Malformed tasks.json: {e}")
+        print(f"Incorrect tasks.json: {e}")
         exit(1)
+
+    # check the type
+    if not isinstance(tasks, list):
+        print(f"Incorrect tasks.json: expected list, got {type(tasks)}")
+        exit(1)
+
+    current_task: int = 1
+
+    # check each key
+    for task in tasks:
+        if not isinstance(task, dict):
+            print(f"Invalid task format for task {current_task}: expected dict")
+            exit(1)
+
+        try:
+
+            # Check types
+            if not isinstance(task["name"], str):
+                print(
+                    f"Invalid task format for task {current_task}: incorrect value for 'name'"
+                )
+                exit(1)
+            elif not isinstance(task["status"], str):
+                print(
+                    f"Invalid task format for task {current_task}: incorrect value for 'status'"
+                )
+                exit(1)
+            elif not isinstance(task["group"], str):
+                print(
+                    f"Invalid task format for task {current_task}: incorrect value for 'group'"
+                )
+                exit(1)
+            elif not isinstance(task["priority"], int):
+                print(
+                    f"Invalid task format for task {current_task}: incorrect value for 'priority'"
+                )
+                exit(1)
+            elif not isinstance(task["due_date"], dict):
+                print(
+                    f"Invalid task format for task {current_task}: incorrect value for 'due_date'"
+                )
+                exit(1)
+            elif not isinstance(task["description"], str):
+                print(
+                    f"Invalid task format for task {current_task}: incorrect value for 'description'"
+                )
+                exit(1)
+
+            # Check due date types
+            if not isinstance(task["due_date"]["day"], int):
+                print(
+                    f"Invalid task format for task {current_task}: incorrect value for 'due_date[day]'"
+                )
+                exit(1)
+            elif not isinstance(task["due_date"]["month"], int):
+                print(
+                    f"Invalid task format for task {current_task}: incorrect value for 'due_date[month]'"
+                )
+                exit(1)
+            if not isinstance(task["due_date"]["year"], int):
+                print(
+                    f"Invalid task format for task {current_task}: incorrect value for 'due_date[year]'"
+                )
+                exit(1)
+
+        except KeyError:
+            print(f"Invalid task format for task {current_task}: missing keys")
+
+    return tasks
 
 
 def handle_multiple(tasks: list[Task]) -> int:
@@ -194,10 +242,14 @@ def get_tasks_dataset(tasks: list[Task]) -> list[TaskDataset]:
 
         # Check if date is valid (task has no date if not)
         if due["year"] != -1:
-            due_str = str(date(due["year"], due["month"], due["day"]))
-            days_diff: int = get_days_diff(get_today(), due)
-            diff_col: str = get_days_col(days_diff)
-            diff_str = f"{diff_col}{days_diff}d{g.RESET}"
+            try:
+                due_str = str(date(due["year"], due["month"], due["day"]))
+                days_diff: int = get_days_diff(get_today(), due)
+                diff_col: str = get_days_col(days_diff)
+                diff_str = f"{diff_col}{days_diff}d{g.RESET}"
+            except ValueError as e:
+                print(f"Parsing date for '{task["name"]}' failed: {e}")
+                exit(1)
 
         dataset: TaskDataset = {
             "name": name,
@@ -210,3 +262,12 @@ def get_tasks_dataset(tasks: list[Task]) -> list[TaskDataset]:
         tasks_dataset.append(dataset)
 
     return tasks_dataset
+
+
+# Init
+def init() -> None:
+    g.CONFIG_PATH = get_conf_path()
+    g.TASKS_JSON = f"{g.CONFIG_PATH}/tasks.json"
+    g.PYTD_CONF = f"{g.CONFIG_PATH}/pytd.conf"
+    check_config(g.CONFIG_PATH)
+    g.TASKS = get_tasks(g.TASKS_JSON)

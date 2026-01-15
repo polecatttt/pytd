@@ -6,7 +6,14 @@ import pytd.opers as oper
 
 
 def main(args: list[str]) -> int:
-    helpers.validate_json()
+    helpers.init()
+    date1: helpers.Date = {
+        "day": 12,
+        "month": 3,
+        "year": 2026,
+    }
+
+    oper.list_all()
     return 0
 
 

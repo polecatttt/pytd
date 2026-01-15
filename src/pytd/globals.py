@@ -16,18 +16,27 @@ RESET = "\033[0m"
 
 # Config
 OS: str = system()
-CONFIG_PATH: str = helpers.get_conf_path()
-TASKS_JSON: str = f"{CONFIG_PATH}/tasks.json"
-PYTD_CONF: str = f"{CONFIG_PATH}/pytd.conf"
+CONFIG_PATH: str
+TASKS_JSON: str
+PYTD_CONF: str
 
 # Config Values
 THRESHOLD_RED: int = 7
 THRESHOLD_YELLOW: int = 14
 
 # Tasks
-TASKS: list[helpers.Task] = helpers.get_tasks(TASKS_JSON)
+TASKS: list[helpers.Task]
 
 # Others
+REQUIRED_TYPES: dict[str, type] = {
+    "name": str,
+    "status": str,
+    "group": str,
+    "priority": int,
+    "due_date": helpers.Date,
+    "description": str,
+}
+
 LIST_HEADERS: dict[str, str] = {
     "name": "Name",
     "status": "Status",
