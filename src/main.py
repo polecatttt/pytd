@@ -7,13 +7,13 @@ import pytd.opers as oper
 
 def main(args: list[str]) -> int:
     helpers.init()
-    date1: helpers.Date = {
-        "day": 12,
-        "month": 3,
-        "year": 2026,
-    }
 
-    oper.version()
+    # Check if args exists
+    if not args:
+        oper.help()
+        print("\nError: no command given")
+        return 1
+
     return 0
 
 
