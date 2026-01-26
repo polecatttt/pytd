@@ -13,7 +13,7 @@ def main(args: list[str]) -> int:
         "year": 2026,
     }
 
-    oper.list_all()
+    oper.version()
     return 0
 
 

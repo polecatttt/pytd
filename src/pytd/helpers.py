@@ -2,7 +2,7 @@ import json
 import os
 from datetime import date
 from sys import exit
-from typing import Any, TypedDict, cast
+from typing import TypedDict
 
 from tabulate import tabulate
 

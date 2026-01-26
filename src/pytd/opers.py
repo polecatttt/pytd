@@ -1,5 +1,4 @@
 import json
-from datetime import date
 from typing import Any
 
 from tabulate import tabulate
@@ -96,10 +95,12 @@ def list_priority(priority: int | None) -> None:
 
 
 # Add
-def add(name: str, due_date: Date, group: str, priority: int, description: str) -> None:
+def add(
+    name: str, due_date: Date, group: str, priority: int, description: str, status: str
+) -> None:
     task_dict: Task = {
         "name": name,
-        "status": "Due",
+        "status": status,
         "group": group,
         "priority": priority,
         "due_date": due_date,
@@ -192,11 +193,46 @@ def info(name: str) -> None:
     print(f"Name: {task["name"]}")
     print(f"Status: {task["status"]}")
     print(f"Group: {task["group"]}")
+    print(f"Priority: {task["priority"]}")
     print(
-        f"Priority: {helpers.get_priority_col(task["priority"])}{task["priority"]}{g.RESET}"
-    )
-    print(
-        f"Due Date: {str(date(task["due_date"]["year"], task["due_date"]["month"], task["due_date"]["day"]))}"
+        f"Due Date: {task["due_date"]["year"]}-{task["due_date"]["month"]}-{task["due_date"]["day"]}"
     )
     print()
     print(f"Description: {task["description"]}")
+
+
+# Help
+def help() -> None:
+    print("Usage: pytd [command] [options]")
+    print()
+
+    print("Avaliable commands and options:")
+    print("  add: add a new task ( pytd add [name] [-dgpDs] )")
+    print("    -d, --due-date: due date of the task. no due date if not set")
+    print("    -g, --group: group of the task. default if not set")
+    print("    -p, --priority: priority of the task. 4 if not set. must be 1..4")
+    print("    -D, --description: description of the task. empty if not set")
+    print("    -s, --status: status of the task. Due if not set")
+    print("  edit: edit an existing task ( pytd edit [name] [-ngspdD] )")
+    print("    -n, --name: new name for the task")
+    print("    -g, --group: new group for the task")
+    print("    -s, --status: new status for the task")
+    print("    -p, --priority: new priority for the task")
+    print("    -d, --due-date: new due date for the task")
+    print("    -D, --description: new description for the task")
+    print("  del: delete a task ( pytd del [name] )")
+    print("  ls: list all tasks ( pytd ls [-mf] )")
+    print("   -m, --method: method to list by (see above except description)")
+    print("   -f, --filter: a filter for some methods (see above except duedate)")
+    print("  info: show info on a specific task ( pytd info [name] )")
+    print("  help: view this message ( pytd help )")
+    print("  version: get the version ( pytd version [-m] )")
+    print("    -m, --minimal: only show the version number")
+
+
+# Version
+def version(minimal: bool = False) -> None:
+    if not minimal:
+        print(f"{g.YELLOW}pytd{g.RESET} {g.DIM}{g.VERSION}{g.RESET}")
+    else:
+        print(g.VERSION)

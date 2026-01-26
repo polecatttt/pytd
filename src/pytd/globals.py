@@ -3,6 +3,8 @@ from re import compile
 
 import pytd.helpers as helpers
 
+VERSION: str = "1.0.0"
+
 # ANSI Escape Codes
 BLACK = "\033[30m"
 RED = "\033[31m"
@@ -12,6 +14,8 @@ BLUE = "\033[34m"
 MAGENTA = "\033[35m"
 CYAN = "\033[36m"
 WHITE = "\033[37m"
+BOLD = "\033[1m"
+DIM = "\033[2m"
 RESET = "\033[0m"
 
 # Config
