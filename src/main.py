@@ -11,8 +11,19 @@ def main(args: list[str]) -> int:
     # Check if args exists
     if not args:
         oper.help()
-        print("\nError: no command given")
+        print("\nNo command given!")
         return 1
+
+    # Check if command is valid
+    if args[0] not in g.VALID_CMDS:
+        oper.help()
+        print("\nNot a valid command!")
+        return 1
+
+    # Collect and exec commands
+    if args[0] == "help":
+        oper.help()
+        return 0
 
     return 0
 
