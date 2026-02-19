@@ -113,7 +113,7 @@ def add(
 
 
 # Edit
-def edit(name: str, key: str, new_val: Any) -> None:
+def edit(name: str, key: str, new_val: Any) -> bool:
     found: bool = False
     pending: list[Task] = []
     pending_idx: list[int] = []
@@ -126,7 +126,7 @@ def edit(name: str, key: str, new_val: Any) -> None:
 
     if not found:
         print("Task not found!")
-        return
+        return False
 
     if len(pending) > 1:
         choice: int = helpers.handle_multiple(pending)
@@ -137,10 +137,11 @@ def edit(name: str, key: str, new_val: Any) -> None:
         g.TASKS[pending_idx[0]][key] = new_val
 
     helpers.update_tasks()
+    return True
 
 
 # Delete
-def rm(name: str) -> None:
+def rm(name: str) -> bool:
     found: bool = False
     pending: list[Task] = []
     pending_idx: list[int] = []
@@ -153,7 +154,7 @@ def rm(name: str) -> None:
 
     if not found:
         print("Task not found!")
-        return
+        return False
 
     if len(pending) > 1:
         choice: int = helpers.handle_multiple(pending)
@@ -164,10 +165,11 @@ def rm(name: str) -> None:
         g.TASKS.pop(pending_idx[0])
 
     helpers.update_tasks()
+    return True
 
 
 # Info
-def info(name: str) -> None:
+def info(name: str) -> bool:
     found: bool = False
     pending: list[Task] = []
     pending_idx: list[int] = []
@@ -180,7 +182,7 @@ def info(name: str) -> None:
 
     if not found:
         print("Task not found!")
-        return
+        return False
 
     if len(pending) > 1:
         choice: int = helpers.handle_multiple(pending)
@@ -199,6 +201,8 @@ def info(name: str) -> None:
     )
     print()
     print(f"Description: {task["description"]}")
+
+    return True
 
 
 # Help
@@ -223,11 +227,17 @@ def help() -> None:
     print("  del: delete a task ( pytd del [name] )")
     print("  ls: list all tasks ( pytd ls [-mf] )")
     print("    -m, --method: method to list by (see above except description)")
-    print("    -f, --filter: a filter for some methods (see above except duedate)")
+    print(
+        "    -f, --filter: a filter for some methods (see above except duedate) (unused if method is undefined!)"
+    )
     print("  info: show info on a specific task ( pytd info [name] )")
     print("  help: view this message ( pytd help )")
     print("  version: get the version ( pytd version [-m] )")
     print("    -m, --minimal: only show the version number")
+    print()
+    print("Statuses used for commands: (due, inprogress, done)")
+    print("Priorities used for commands range from 1-4 inclusive")
+    print("All commands have an additional -h option to show that commands options")
 
 
 # Version

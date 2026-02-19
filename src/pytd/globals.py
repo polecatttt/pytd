@@ -58,3 +58,4 @@ STATUS_ORDER: dict[str, int] = {
 
 ANSI_RE = compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 VALID_CMDS: set[str] = {"add", "edit", "del", "ls", "info", "help", "version"}
+LIST_METHODS: set[str] = {"name", "group", "status", "priority", "duedate"}

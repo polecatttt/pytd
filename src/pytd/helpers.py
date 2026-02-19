@@ -79,6 +79,7 @@ def check_config(conf_path: str) -> None:
             f.close()
 
 
+# Tasks
 def get_tasks(filepath: str) -> list[Task]:
     # get task
     try:
@@ -262,6 +263,31 @@ def get_tasks_dataset(tasks: list[Task]) -> list[TaskDataset]:
         tasks_dataset.append(dataset)
 
     return tasks_dataset
+
+
+# Helpers for parsing
+def conv_day(day_str: str) -> Date | bool:
+    day_split: list[str] = day_str.split("-")
+
+    # Check if date is valid
+    if len(day_split) != 3:
+        print("error: day must be in form y-m-d!")
+        return False
+
+    try:
+        date(int(day_split[0]), int(day_split[1]), int(day_split[2]))
+    except ValueError:
+        print("error: could not convert to valid date!")
+        return False
+
+    # Make a date object
+    conv_date: Date = {
+        "day": int(day_split[2]),
+        "month": int(day_split[1]),
+        "year": int(day_split[0]),
+    }
+
+    return conv_date
 
 
 # Init
