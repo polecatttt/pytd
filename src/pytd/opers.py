@@ -206,11 +206,16 @@ def info(name: str) -> bool:
     print(f"Status: {task["status"]}")
     print(f"Group: {task["group"]}")
     print(f"Priority: {task["priority"]}")
-    print(
-        f"Due Date: {task["due_date"]["year"]}-{task["due_date"]["month"]}-{task["due_date"]["day"]}"
-    )
+
+    if task["due_date"]["year"] == -1:
+        print("Due Date: None")
+    else:
+        print(
+            f"Due Date: {task["due_date"]["day"]}-{task["due_date"]["month"]}-{task["due_date"]["year"]}"
+        )
     print()
-    print(f"Description: {task["description"]}")
+    if task["description"]:
+        print(f"Description: {task["description"]}")
 
     return True
 
