@@ -16,8 +16,9 @@ import pytd.opers as oper
 import pytd.parsers as parse
 
 
-def main(args: list[str]) -> int:
+def main() -> int:
     helpers.init()
+    args: list[str] = argv[1:]
 
     # Check if args exists
     if not args:
@@ -245,8 +246,6 @@ def main(args: list[str]) -> int:
 
 if __name__ == "__main__":
     try:
-        args: list[str] = argv[1:]
-        code: int = main(args)
-        exit(code)
+        exit(main())
     except KeyboardInterrupt:
         exit(130)
