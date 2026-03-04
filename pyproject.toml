@@ -13,8 +13,8 @@ dependencies = [
 
 # [build-system]
 
-# [project.urls]
-# Repository =
+[project.urls]
+Repository = "https://github.com/polecatttt/pytd"
 
 [tool.black]
 line-length = 88
