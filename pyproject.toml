@@ -1,7 +1,7 @@
 [project]
 name = "pytd"
 version = "1.0.0"
-description = "A simple Python-based CLI todo list."
+description = "A simple CLI-based todo list written in Python."
 readme = "README.md"
 requires-python = ">=3.13"
 license = "GPL-3.0-or-later"
@@ -15,6 +15,9 @@ dependencies = [
 
 [project.urls]
 Repository = "https://github.com/polecatttt/pytd"
+
+[project.scripts]
+pytd = "pytd.main:main"
 
 [tool.black]
 line-length = 88
