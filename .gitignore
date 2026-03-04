@@ -10,12 +10,16 @@ Thumbs.db
 # Python
 dist/
 .venv/
-src/pytd/__pycache__
-src/*.egg-info
+__pycache__/
+*.egg-info/
+*.egg
+build/
 .python-version
-.mypy_cache/
 
 # Other
 .ignore
 .config/
 .vscode/
+.mypy_cache/
+.ruff_cache/
+.env
