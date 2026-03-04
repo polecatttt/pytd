@@ -57,5 +57,20 @@ STATUS_ORDER: dict[str, int] = {
 }
 
 ANSI_RE = compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
-VALID_CMDS: set[str] = {"add", "edit", "del", "ls", "info", "help", "version"}
+VALID_CMDS: set[str] = {
+    "add",
+    "edit",
+    "del",
+    "rm",
+    "ls",
+    "list",
+    "info",
+    "help",
+    "version",
+}
 LIST_METHODS: set[str] = {"name", "group", "status", "priority", "duedate"}
+NO_DUEDATE: helpers.Date = {
+    "day": 0,
+    "month": 0,
+    "year": -1,
+}

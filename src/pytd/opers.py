@@ -1,4 +1,5 @@
 import json
+from sys import exit
 from typing import Any
 
 from tabulate import tabulate
@@ -224,8 +225,8 @@ def help() -> None:
     print("    -p, --priority: new priority for the task")
     print("    -d, --due-date: new due date for the task")
     print("    -D, --description: new description for the task")
-    print("  del: delete a task ( pytd del [name] )")
-    print("  ls: list all tasks ( pytd ls [-mf] )")
+    print("  del / rm: delete a task ( pytd del [name] )")
+    print("  ls / list: list all tasks ( pytd ls [-mf] )")
     print("    -m, --method: method to list by (see above except description)")
     print(
         "    -f, --filter: a filter for some methods (see above except duedate) (unused if method is undefined!)"
@@ -234,15 +235,31 @@ def help() -> None:
     print("  help: view this message ( pytd help )")
     print("  version: get the version ( pytd version [-m] )")
     print("    -m, --minimal: only show the version number")
+    print("    -M, --maximal: shows, like, a lotta info n stuff")
     print()
     print("Statuses used for commands: (due, inprogress, done)")
     print("Priorities used for commands range from 1-4 inclusive")
+    print("Due date must be in the form dd-mm-yyyy")
     print("All commands have an additional -h option to show that commands options")
 
 
 # Version
-def version(minimal: bool = False) -> None:
-    if not minimal:
+def version(minimal: bool = False, maximal: bool = False) -> None:
+    if (not minimal) and (not maximal):
         print(f"{g.YELLOW}pytd{g.RESET} {g.DIM}{g.VERSION}{g.RESET}")
+    elif (minimal) and (maximal):
+        print(
+            f"{g.RED}pytd{g.RESET} has been {g.GREEN}trapped{g.RESET} in a state of {g.BOLD}quantum {g.MAGENTA}madness.{g.RESET}"
+        )
+        exit(1)
+    elif minimal:
+        print(g.VERSION)
+    elif maximal:
+        print(f"{g.YELLOW}pytd{g.RESET} {g.DIM}{g.VERSION}{g.RESET}")
+        print("By Polecat")
+        print(f"License: {g.BLUE}GPL v3{g.RESET} (C. 2026)")
+        print("Repository URL: []")
+        print()
+        print(f"Config location: {g.CONFIG_PATH}")
     else:
         print(g.VERSION)

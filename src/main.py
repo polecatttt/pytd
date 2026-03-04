@@ -29,11 +29,7 @@ def main(args: list[str]) -> int:
 
     elif args[0] == "version":
         cmd_args: argparse.Namespace = parse.parse_version(args[1:])
-        if cmd_args.minimal:
-            oper.version(minimal=True)
-        else:
-            oper.version()
-        return 0
+        oper.version(minimal=cmd_args.minimal, maximal=cmd_args.maximal)
 
     elif args[0] == "info":
         if len(args) == 1:
@@ -45,7 +41,7 @@ def main(args: list[str]) -> int:
             return 1
         return 0
 
-    elif args[0] == "del":
+    elif args[0] == "del" or args[0] == "rm":
         if len(args) == 1:
             print("usage: pytd del [name]")
             print("error: need to provide a task name!")
@@ -75,15 +71,15 @@ def main(args: list[str]) -> int:
                 return 1
 
             if cmd_args.status.lower() == "due":
-                if not oper.edit(name, "group", "Due"):
+                if not oper.edit(name, "status", "Due"):
                     return 1
 
             elif cmd_args.status.lower() == "inprogress":
-                if not oper.edit(name, "group", "In Progress"):
+                if not oper.edit(name, "status", "In Progress"):
                     return 1
 
             elif cmd_args.status.lower() == "done":
-                if not oper.edit(name, "group", "Done"):
+                if not oper.edit(name, "status", "Done"):
                     return 1
 
         if cmd_args.priority:
@@ -114,7 +110,7 @@ def main(args: list[str]) -> int:
 
         return 0
 
-    elif args[0] == "ls":
+    elif args[0] == "ls" or args[0] == "list":
         cmd_args: argparse.Namespace = parse.parse_list(args[1:])
         if not cmd_args.method:
             if cmd_args.filter:
@@ -135,18 +131,19 @@ def main(args: list[str]) -> int:
         elif cmd_args.method == "group":
             if cmd_args.filter:
                 oper.list_group(cmd_args.filter)
-            oper.list_group(None)
+            else:
+                oper.list_group(None)
 
         elif cmd_args.method == "status":
             if cmd_args.filter:
-                if cmd_args.filter not in ("due", "inprogress", "done"):
+                if cmd_args.filter.lower() not in ("due", "inprogress", "done"):
                     print("error: invalid status! must be (due, inprogress, done)")
                     return 1
-                if cmd_args.filter == "due":
+                if cmd_args.filter.lower() == "due":
                     oper.list_status("Due")
-                elif cmd_args.filter == "inprogress":
+                elif cmd_args.filter.lower() == "inprogress":
                     oper.list_status("In Progress")
-                elif cmd_args.filter == "done":
+                elif cmd_args.filter.lower() == "done":
                     oper.list_status("Done")
             else:
                 oper.list_status(None)
@@ -172,10 +169,67 @@ def main(args: list[str]) -> int:
             if cmd_args.filter:
                 print("error: filters for duedate arent supported yet!")
                 return 1
-
-            oper.list_duedate()
+            else:
+                oper.list_duedate()
 
         return 0
+
+    elif args[0] == "add":
+        if len(args) < 2:
+            print("usage: pytd del [name]")
+            print("error: must provide name!")
+            return 1
+
+        cmd_args: argparse.Namespace = parse.parse_add(args[2:])
+
+        # Setting variables
+        name: str = args[1]
+
+        if cmd_args.due_date:
+            date: helpers.Date | bool = helpers.conv_day(cmd_args.due_date)
+            if not date:
+                return 1
+        else:
+            date: helpers.Date | bool = g.NO_DUEDATE
+
+        if cmd_args.group:
+            group: str = cmd_args.group
+        else:
+            group: str = "default"
+
+        if cmd_args.priority:
+            try:
+                priority: int = int(cmd_args.priority)
+            except ValueError:
+                print("error: priority could not be converted to int")
+                return 1
+
+            if not (1 <= priority <= 4):
+                print("error: priority must be 1-4 inclusive!")
+                return 1
+        else:
+            priority: int = 4
+
+        if cmd_args.description:
+            description: str = cmd_args.description
+        else:
+            description: str = ""
+
+        if cmd_args.status:
+            if cmd_args.status.lower() not in ("due", "inprogress", "done"):
+                print("error: invalid status! must be (due, inprogress, done)")
+            if cmd_args.status.lower() == "due":
+                status: str = "Due"
+            elif cmd_args.status.lower() == "inprogress":
+                status: str = "In Progress"
+            elif cmd_args.status.lower() == "done":
+                status: str = "Done"
+            else:
+                status: str = "Due"
+        else:
+            status: str = "Due"
+
+        oper.add(name, date, group, priority, description, status)  # pyright: ignore
 
     return 0
 

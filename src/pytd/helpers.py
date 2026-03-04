@@ -97,7 +97,7 @@ def get_tasks(filepath: str) -> list[Task]:
     current_task: int = 1
 
     # check each key
-    for task in tasks:
+    for task in tasks:  # pyright: ignore
         if not isinstance(task, dict):
             print(f"Invalid task format for task {current_task}: expected dict")
             exit(1)
@@ -156,7 +156,7 @@ def get_tasks(filepath: str) -> list[Task]:
         except KeyError:
             print(f"Invalid task format for task {current_task}: missing keys")
 
-    return tasks
+    return tasks  # pyright: ignore
 
 
 def handle_multiple(tasks: list[Task]) -> int:
@@ -244,7 +244,7 @@ def get_tasks_dataset(tasks: list[Task]) -> list[TaskDataset]:
         # Check if date is valid (task has no date if not)
         if due["year"] != -1:
             try:
-                due_str = str(date(due["year"], due["month"], due["day"]))
+                due_str = f"{due['day']}-{due['month']}-{due['year']}"
                 days_diff: int = get_days_diff(get_today(), due)
                 diff_col: str = get_days_col(days_diff)
                 diff_str = f"{diff_col}{days_diff}d{g.RESET}"
@@ -271,20 +271,20 @@ def conv_day(day_str: str) -> Date | bool:
 
     # Check if date is valid
     if len(day_split) != 3:
-        print("error: day must be in form y-m-d!")
+        print("error: day must be in form dd-mm-yyyy!")
         return False
 
     try:
-        date(int(day_split[0]), int(day_split[1]), int(day_split[2]))
+        date(int(day_split[2]), int(day_split[1]), int(day_split[0]))
     except ValueError:
         print("error: could not convert to valid date!")
         return False
 
     # Make a date object
     conv_date: Date = {
-        "day": int(day_split[2]),
+        "day": int(day_split[0]),
         "month": int(day_split[1]),
-        "year": int(day_split[0]),
+        "year": int(day_split[2]),
     }
 
     return conv_date
