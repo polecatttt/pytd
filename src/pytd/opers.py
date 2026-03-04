@@ -267,7 +267,7 @@ def version(minimal: bool = False, maximal: bool = False) -> None:
         print(f"{g.YELLOW}pytd{g.RESET} {g.DIM}{g.VERSION}{g.RESET}")
         print("By Polecat")
         print(f"License: {g.BLUE}GPL v3{g.RESET} (C. 2026)")
-        print("Repository URL: []")
+        print("Repository URL: <https://github.com/polecatttt/pytd>")
         print()
         print(f"Config location: {g.CONFIG_PATH}")
     else:
