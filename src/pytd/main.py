@@ -10,10 +10,10 @@
 import argparse
 from sys import argv, exit
 
-import globals as g
-import helpers as helpers
-import opers as oper
-import parsers as parse
+import pytd.globals as g
+import pytd.helpers as helpers
+import pytd.opers as oper
+import pytd.parsers as parse
 
 
 def main() -> int:

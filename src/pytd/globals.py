@@ -10,7 +10,7 @@
 from platform import system
 from re import compile
 
-import helpers
+import pytd.helpers as helpers
 
 VERSION: str = "1.0.0"
 
