@@ -13,9 +13,8 @@ from datetime import date
 from sys import exit
 from typing import TypedDict
 
+import globals as g
 from tabulate import tabulate
-
-import pytd.globals as g
 
 
 class Date(TypedDict):
