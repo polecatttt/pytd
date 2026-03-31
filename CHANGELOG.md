@@ -1,5 +1,6 @@
 # Unreleased
-## Added
+## Add
+- ***(urgent)*** update help message because it is oh so dearly horrible
 - Support for other tabulate table formats when listing
 - Support for different date formats (in configuration)
 - Support for tags
