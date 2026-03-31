@@ -4,8 +4,8 @@ No I swear this is not anything professional or good i just wanted the title to 
 ## Contents
 - [Installation](https://github.com/polecatttt/pytd/edit/main/README.md#installation)
 - [Features](https://github.com/polecatttt/pytd/edit/main/README.md#features)
-- [Usage Examples]
-- [Task Metadata]
+- [Usage Examples](https://github.com/polecatttt/pytd/edit/main/README.md#usage-examples)
+- [Task Metadata](https://github.com/polecatttt/pytd/edit/main/README.md#task-metadata)
 
 ## Installation
 pytd can be installed via pip or pipx:
