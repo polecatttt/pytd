@@ -12,7 +12,7 @@ from re import compile
 
 import pytd.helpers as helpers
 
-VERSION: str = "1.0.0"
+VERSION: str = "1.0.2"
 
 # ANSI Escape Codes
 BLACK = "\033[30m"
