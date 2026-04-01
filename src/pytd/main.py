@@ -22,24 +22,33 @@ def main() -> int:
 
     # Check if args exists
     if not args:
-        oper.help()
+        oper.help(None)
         print("\nNo command given!")
         return 1
 
     # Check if command is valid
     if args[0] not in g.VALID_CMDS:
-        oper.help()
+        oper.help(None)
         print("\nNot a valid command!")
         return 1
 
     # Collect and exec commands
     if args[0] == "help":
-        oper.help()
+        if len(args) > 1:
+            help_cmd = args[1].lower().strip()
+            if help_cmd not in g.VALID_CMDS:
+                oper.help(None)
+                print("\nNot a valid command!")
+                return 1
+            oper.help(cmd=help_cmd)
+        else:
+            oper.help(None)
         return 0
 
     elif args[0] == "version":
         cmd_args: argparse.Namespace = parse.parse_version(args[1:])
         oper.version(minimal=cmd_args.minimal, maximal=cmd_args.maximal)
+        return 0
 
     elif args[0] == "info":
         if len(args) == 1:

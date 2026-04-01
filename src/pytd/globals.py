@@ -12,7 +12,7 @@ from re import compile
 
 import pytd.helpers as helpers
 
-VERSION: str = "1.0.2"
+VERSION: str = "1.0.3"
 
 # ANSI Escape Codes
 BLACK = "\033[30m"
@@ -25,6 +25,7 @@ CYAN = "\033[36m"
 WHITE = "\033[37m"
 BOLD = "\033[1m"
 DIM = "\033[2m"
+UNDERLINE = "\033[4m"
 RESET = "\033[0m"
 
 # Config

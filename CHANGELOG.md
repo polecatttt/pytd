@@ -1,11 +1,17 @@
 # Unreleased
 ## Add
-- ***(urgent)*** update help message because it is oh so dearly horrible
 - Support for other tabulate table formats when listing
 - Support for different date formats (in configuration)
 - Support for tags
 - Date configuring: configure when a date is green, yellow or red (threshold values)
 - Configure colouring for priority levels
+
+# 1.0.3
+## Added
+- Seperated usage information and options for each command into its own help command (eg. `pytd help add`)
+
+## Changed
+- Changed the main `pytd help` text
 
 # 1.0.2
 ## Added
