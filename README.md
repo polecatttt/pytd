@@ -24,6 +24,8 @@ pipx install 'git+https://github.com/polecatttt/pytd'
 - edit: change a tasks metadata
 - del (rm): delete a task
 - info: get info on a selected task
+- help: pretty self explanatory
+- version: displays the current version
 ### Configuration
 - That comes in the future!
 
