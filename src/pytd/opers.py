@@ -237,7 +237,9 @@ def help() -> None:
     print("    -g, --group: new group for the task")
     print("    -s, --status: new status for the task")
     print("    -p, --priority: new priority for the task")
-    print("    -d, --due-date: new due date for the task")
+    print(
+        "    -d, --due-date: new due date for the task (set to 'remove' to remove due date!)"
+    )
     print("    -D, --description: new description for the task")
     print("  del / rm: delete a task ( pytd del [name] )")
     print("  ls / list: list all tasks ( pytd ls [-mf] )")

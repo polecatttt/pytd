@@ -7,6 +7,10 @@
 - Date configuring: configure when a date is green, yellow or red (threshold values)
 - Configure colouring for priority levels
 
+# 1.0.2
+## Added
+- Can now remove due dates from tasks with `pytd edit 'name' -d remove`
+
 # 1.0.1
 ## Changed
 - Made date format consistent in info

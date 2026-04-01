@@ -107,12 +107,16 @@ def main() -> int:
                 return 1
 
         if cmd_args.due_date:
-            date: helpers.Date | bool = helpers.conv_day(cmd_args.due_date)
-            if not date:
-                return 1
+            if cmd_args.due_date == "remove":
+                if not oper.edit(name, "due_date", g.NO_DUEDATE):
+                    return 1
+            else:
+                date: helpers.Date | bool = helpers.conv_day(cmd_args.due_date)
+                if not date:
+                    return 1
 
-            if not oper.edit(name, "due_date", date):
-                return 1
+                if not oper.edit(name, "due_date", date):
+                    return 1
 
         if cmd_args.description:
             if not oper.edit(name, "description", cmd_args.description):
