@@ -222,42 +222,6 @@ def info(name: str) -> bool:
 
 # Help
 def help(cmd: str | None) -> None:
-    # if cmd is None:
-    #     print("Usage: pytd [command] [options]")
-    #     print()
-
-    #     print("Avaliable commands and options:")
-    #     print("  add: add a new task ( pytd add [name] [-dgpDs] )")
-    #     print("    -d, --due-date: due date of the task. no due date if not set")
-    #     print("    -g, --group: group of the task. default if not set")
-    #     print("    -p, --priority: priority of the task. 4 if not set. must be 1..4")
-    #     print("    -D, --description: description of the task. empty if not set")
-    #     print("    -s, --status: status of the task. Due if not set")
-    #     print("  edit: edit an existing task ( pytd edit [name] [-ngspdD] )")
-    #     print("    -n, --name: new name for the task")
-    #     print("    -g, --group: new group for the task")
-    #     print("    -s, --status: new status for the task")
-    #     print("    -p, --priority: new priority for the task")
-    #     print(
-    #         "    -d, --due-date: new due date for the task (set to 'remove' to remove due date!)"
-    #     )
-    #     print("    -D, --description: new description for the task")
-    #     print("  del / rm: delete a task ( pytd del [name] )")
-    #     print("  ls / list: list all tasks ( pytd ls [-mf] )")
-    #     print("    -m, --method: method to list by (see above except description)")
-    #     print(
-    #         "    -f, --filter: a filter for some methods (see above except duedate) (unused if method is undefined!)"
-    #     )
-    #     print("  info: show info on a specific task ( pytd info [name] )")
-    #     print("  help: view this message ( pytd help )")
-    #     print("  version: get the version ( pytd version [-m] )")
-    #     print("    -m, --minimal: only show the version number")
-    #     print("    -M, --maximal: shows, like, a lotta info n stuff")
-    #     print()
-    #     print("Statuses used for commands: (due, inprogress, done)")
-    #     print("Priorities used for commands range from 1-4 inclusive")
-    #     print("Due date must be in the form dd-mm-yyyy")
-    #     print("All commands have an additional -h option to show that commands options")
     if cmd is None:
         print(f"{g.UNDERLINE}{g.BOLD}Avaliable commands:{g.RESET}")
         print(f"  {'add':<8} Add a new task.")
