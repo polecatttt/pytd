@@ -1,3 +1,24 @@
+# ⚠️ ARCHIVED!
+moved my stuff to [codeberg](https://codeberg.org/polecat/pytd), this github repo **wont** be pushed to and maintained anymore
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+
 # pytd: a simple, CLI-based task manager.
 No I swear this is not anything professional or good i just wanted the title to look good
 
